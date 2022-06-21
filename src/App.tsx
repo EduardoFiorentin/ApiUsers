@@ -12,22 +12,24 @@ export function App() {
   const [passwordConfirm, setPasswordConfirm] = useState('')
 
   function handleInput() {
-    if (password != passwordConfirm) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Senhas diferentes!'
-      })
-    } else if (name) {
+    if (name && email && password && passwordConfirm) {
       Swal.fire('Sucesso!', 'Usuário cadastrado com sucesso!', 'success')
+
+      if (password != passwordConfirm) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Senhas diferentes!'
+        })
+      }
 
       console.log([name, email, password])
     } else {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Usuário não cadastrado',
-        footer: '<a href="">Verifique as informações e tente novamente</a>'
+        text: 'Usuário não cadastrado!',
+        footer: 'Verifique as informações'
       })
     }
   }
