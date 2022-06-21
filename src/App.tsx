@@ -11,9 +11,21 @@ export function App() {
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
 
+  function error() {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Usuário não cadastrado!'
+    })
+  }
+
+  function success() {
+    Swal.fire('Sucesso!', 'Usuário cadastrado com sucesso!', 'success')
+  }
+
   function handleInput() {
     if (name && email && password && passwordConfirm) {
-      Swal.fire('Sucesso!', 'Usuário cadastrado com sucesso!', 'success')
+      success()
 
       if (password != passwordConfirm) {
         Swal.fire({
@@ -25,12 +37,7 @@ export function App() {
 
       console.log([name, email, password])
     } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Usuário não cadastrado!',
-        footer: 'Verifique as informações'
-      })
+      error()
     }
   }
 
@@ -118,6 +125,16 @@ export function App() {
           Lista de Usuários
         </a>
       </div>
+      <footer className="bg-indigo-800 text-white text-center w-96 m-auto mt-5 rounded-md p-2 hover:bg-indigo-700">
+        by
+        <a
+          className="font-bold ml-2 hover:underline"
+          href="https://github.com/yurirsantos"
+          target="_blanck"
+        >
+          Yuri R. Santos
+        </a>
+      </footer>
     </>
   )
 }
