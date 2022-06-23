@@ -1,4 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import Swal from "sweetalert2"
+
+// API Functions
+import {getUser} from './service/api'
+
 interface users {
   name: string
   email: string
@@ -10,6 +15,8 @@ export function App() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
+  const[cpf, setCpf] = useState('')
+  const [phone, setPhone] = useState('')
 
   const [buttonSave, setButtonSave] = useState(false)
 
@@ -30,7 +37,7 @@ export function App() {
     if (sizeName < 10) {
       error()
     }
-    if (name && email && password && passwordConfirm) {
+    if (name && email && password && passwordConfirm && cpf && phone) {
       success()
 
       if (password != passwordConfirm) {
@@ -41,22 +48,35 @@ export function App() {
         })
       }
 
-      console.log([name, email, password])
+      console.log(
+        {
+          "id": 1,
+          "name": name,
+          "email": email,
+          "password": password,
+          "phone": phone,
+          "cpf": cpf,
+          "role": 0,
+          "updatedAt": new Date(),
+          "createdAt": new Date()
+        }
+      )
     } else {
       error()
     }
   }
 
-  const users = [
-    {
-      name: 'Yuri Rhuan dos Santos',
-      email: 'yuri.santos.cco@gmail.com'
-    },
-    {
-      name: 'Kauane Policena Artini',
-      email: 'kauanepolicena@gmail.com'
-    }
-  ]
+  // const users = [
+  //   {
+  //     name: 'Yuri Rhuan dos Santos',
+  //     email: 'yuri.santos.cco@gmail.com'
+  //   },
+  //   {
+  //     name: 'Kauane Policena Artini',
+  //     email: 'kauanepolicena@gmail.com'
+  //   }
+  // ]
+  const users = getUser()
 
   function showButtonSave() {
     setButtonSave(true)
@@ -65,6 +85,13 @@ export function App() {
   function toHideButtonSave() {
     setButtonSave(false)
   }
+
+  //API Config
+    //load users from data base
+  useEffect(() => {
+    const users = getUser()
+    // console.log(response)
+  }, [])
 
   function deleteUser() {
     Swal.fire({
@@ -98,6 +125,34 @@ export function App() {
               className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
               placeholder="Seu Nome"
               onChange={e => setName(e.target.value)}
+            />
+          </label>
+        </div>
+        <div className="mt-3 mb-3">
+          <label className="block">
+            <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
+              CPF
+            </span>
+            <input
+              type="text"
+              name="cpf"
+              className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+              placeholder="Seu CPF"
+              onChange={e => setCpf(e.target.value)}
+            />
+          </label>
+        </div>
+        <div className="mt-3 mb-3">
+          <label className="block">
+            <span className="after:content-['*'] after:ml-0.5 after:text-red-500 block text-sm font-medium text-slate-700">
+              Telefone
+            </span>
+            <input
+              type="phone"
+              name="nome"
+              className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+              placeholder="Seu Numero de telefone"
+              onChange={e => setPhone(e.target.value)}
             />
           </label>
         </div>
@@ -152,7 +207,7 @@ export function App() {
       </div>
       <div className="bg-gray-100 p-5 w-2/5 m-auto rounded-md mt-5 h-auto">
         <div className="relative grid gap-6 bg-gray-50 rounded-md px-5 py-6 sm:gap-8 sm:p-8 rounded-md">
-          {users.map(item => {
+          {users.response.map(item => {
             return (
               <a className="-m-3 p-3 items-start rounded-lg bg-gray-100">
                 <h1 className="font-bold text-center text-xl m-4">
@@ -168,6 +223,18 @@ export function App() {
                   <label className="font-bold">E-mail</label>
                   <p className="text-base font-medium text-gray-900">
                     {item.email}
+                  </p>
+                </div>
+                <div className="m-4 bg-gray-50 p-2 rounded-md">
+                  <label className="font-bold">CPF</label>
+                  <p className="text-base font-medium text-gray-900">
+                    {item.cpf}
+                  </p>
+                </div>
+                <div className="m-4 bg-gray-50 p-2 rounded-md">
+                  <label className="font-bold">Telefone</label>
+                  <p className="text-base font-medium text-gray-900">
+                    {item.phone}
                   </p>
                 </div>
                 <div className="flex gap-2 w-1/4 m-auto">
