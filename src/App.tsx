@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ReturnUsers } from './Components/Users/ReturnUsers'
 interface users {
   name: string
   email: string
@@ -47,17 +48,6 @@ export function App() {
     }
   }
 
-  const users = [
-    {
-      name: 'Yuri Rhuan dos Santos',
-      email: 'yuri.santos.cco@gmail.com'
-    },
-    {
-      name: 'Kauane Policena Artini',
-      email: 'kauanepolicena@gmail.com'
-    }
-  ]
-
   function showButtonSave() {
     setButtonSave(true)
   }
@@ -79,6 +69,33 @@ export function App() {
         Swal.fire('Cancelado!', '', 'info')
       }
     })
+  }
+
+  async function getUsers() {
+    try {
+      const resp = await fetch('http://localhost:2828')
+      const users = await resp.json()
+      showUsers(users)
+    } catch (error) {
+      console.log('bah tche deu erro')
+    }
+  }
+
+  getUsers()
+
+  function showUsers(users: any) {
+    let output = ''
+
+    for (let user of users) {
+      output += `                <div className="m-4 bg-gray-50 p-2 rounded-md">
+      <label className="font-bold">Nome</label>
+      <p className="text-base font-medium text-gray-900">
+        ${user.name}
+      </p>
+    </div>`
+    }
+
+    document.getElementById('divUsers').innerHTML = output
   }
 
   return (
@@ -151,62 +168,8 @@ export function App() {
         </div>
       </div>
       <div className="bg-gray-100 p-5 w-2/5 m-auto rounded-md mt-5 h-auto">
-        <div className="relative grid gap-6 bg-gray-50 rounded-md px-5 py-6 sm:gap-8 sm:p-8 rounded-md">
-          {users.map(item => {
-            return (
-              <a className="-m-3 p-3 items-start rounded-lg bg-gray-100">
-                <h1 className="font-bold text-center text-xl m-4">
-                  Dados do Usuário {item.name}
-                </h1>
-                <div className="m-4 bg-gray-50 p-2 rounded-md">
-                  <label className="font-bold">Nome</label>
-                  <p className="text-base font-medium text-gray-900">
-                    {item.name}
-                  </p>
-                </div>
-                <div className="m-4 bg-gray-50 p-2 rounded-md">
-                  <label className="font-bold">E-mail</label>
-                  <p className="text-base font-medium text-gray-900">
-                    {item.email}
-                  </p>
-                </div>
-                <div className="flex gap-2 w-1/4 m-auto">
-                  <div className="rounded-md shadow" onClick={showButtonSave}>
-                    <a className="w-10 flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">
-                      Editar
-                    </a>
-                  </div>
-
-                  <div
-                    className="rounded-md shadow"
-                    id="buttonDeleteUser"
-                    onClick={deleteUser}
-                  >
-                    <a className="w-10 flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 md:py-4 md:text-lg md:px-10">
-                      Excluir
-                    </a>
-                  </div>
-                </div>
-                {buttonSave ? (
-                  <div
-                    className="rounded-md shadow cursor-pointer"
-                    onClick={toHideButtonSave}
-                  >
-                    <a className="w-auto mt-5 m-auto flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 md:py-4 md:text-lg md:px-10">
-                      Salvar
-                    </a>
-                  </div>
-                ) : (
-                  <div className="rounded-md shadow">
-                    <a className="w-auto mt-5 m-auto flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-300  md:py-4 md:text-lg md:px-10">
-                      Salvar
-                    </a>
-                  </div>
-                )}
-              </a>
-            )
-          })}
-        </div>
+        <h1 className="font-bold text-center text-xl m-4">Dados do Usuário</h1>
+        <div id="divUsers"></div>
       </div>
 
       <footer className="bg-indigo-800 text-white text-center w-96 m-auto mt-5 rounded-md p-2 hover:bg-indigo-700">
