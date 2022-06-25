@@ -17,6 +17,16 @@ app.get('/', (req, res) => {
     {
       name: 'Lorenzo Costella',
       email: 'lorenzo.costella@gmail.com'
+    },
+
+    {
+      name: 'Lauren Costella',
+      email: 'lauren.costella@gmail.com'
+    },
+
+    {
+      name: 'Enzo Policena Artini',
+      email: 'enzo.artini@gmail.com'
     }
   ])
 })
